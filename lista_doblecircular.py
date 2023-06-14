@@ -75,7 +75,8 @@ class ListaDoblementeEnlazadaCircular:
                 fecha = peli.find('fecha').text
                 hora = peli.find('hora').text
                 objeto = Pelicula(nombre, titulo, director, anio, fecha, hora)
-                self.insertar_final(objeto)
+                if self.verificar_nodos_repetidos():
+                    self.insertar_final(objeto)
 
 
     def buscar_elemento(self, dato):
@@ -91,6 +92,50 @@ class ListaDoblementeEnlazadaCircular:
                 break
 
         return False
+    
+
+    def verificar_nodos_repetidos(self):
+        valores = set()  # Conjunto para almacenar los valores de los nodos
+
+        nodo_actual = self.primero
+        while nodo_actual is not None:
+            if nodo_actual.dato in valores:
+                return False
+
+            valores.add(nodo_actual.dato)
+            nodo_actual = nodo_actual.siguiente
+
+            if nodo_actual == self.primero:
+                break
+
+        return True
+    
+
+    def eliminar_elemento(self, elemento):
+        if self.primero is None:
+            return  # La lista está vacía, no hay nada que eliminar
+
+        if self.primero == self.ultimo and self.primero.dato == elemento:
+            self.primero = None
+            self.ultimo = None
+            return
+
+        nodo_actual = self.primero
+        while nodo_actual is not None:
+            if nodo_actual.dato == elemento:
+                if nodo_actual == self.primero:
+                    self.primero = nodo_actual.siguiente
+                    self.primero.anterior = self.ultimo
+                    self.ultimo.siguiente = self.primero
+                elif nodo_actual == self.ultimo:
+                    self.ultimo = nodo_actual.anterior
+                    self.ultimo.siguiente = self.primero
+                    self.primero.anterior = self.ultimo
+                else:
+                    nodo_actual.anterior.siguiente = nodo_actual.siguiente
+                    nodo_actual.siguiente.anterior = nodo_actual.anterior
+                return
+            nodo_actual = nodo_actual.siguiente
             
         
 

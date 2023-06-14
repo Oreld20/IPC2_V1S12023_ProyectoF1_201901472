@@ -57,19 +57,55 @@ class ListaDoblementeEnlazada:
             numero = sala.find('numero').text
             asientos = sala.find('asientos').text
             objeto = Salas(numero, asientos)
-            self.insertar_final(objeto)
+            if self.verificar_nodos_repetidos():
+                self.insertar_final(objeto)
 
 
-    def buscar_elemento(self, dato):
-        if self.esta_vacia():
-            return False
+    def buscar_elemento(self, target):
+        current_node = self.primero
+        while current_node is not None:
+            if current_node.dato.sala == target:
+                return current_node.dato
+            current_node = current_node.siguiente
+        return None
+    
+    def verificar_nodos_repetidos(self):
+        valores = set()
 
-        actual = self.primero
-        while actual is not None:
-            if actual.dato == dato:
-                return True
-            actual = actual.siguiente
+        nodo_actual = self.primero
+        while nodo_actual is not None:
+            if nodo_actual.dato in valores:
+                return False
 
-        return False
+            valores.add(nodo_actual.dato)
+            nodo_actual = nodo_actual.siguiente
+
+        return True
+    
+    def eliminar_elemento(self, elemento):
+        if self.primero is None:
+            return  # La lista está vacía, no hay nada que eliminar
+
+        if self.primero.dato == elemento:
+            if self.primero == self.ultimo:
+                self.primero = None
+                self.ultimo = None
+            else:
+                self.primero = self.primero.siguiente
+                self.primero.anterior = None
+            return
+
+        if self.ultimo.dato == elemento:
+            self.ultimo = self.ultimo.anterior
+            self.ultimo.siguiente = None
+            return
+
+        nodo_actual = self.primero.siguiente
+        while nodo_actual is not None:
+            if nodo_actual.dato == elemento:
+                nodo_actual.anterior.siguiente = nodo_actual.siguiente
+                nodo_actual.siguiente.anterior = nodo_actual.anterior
+                return
+            nodo_actual = nodo_actual.siguiente
 
             

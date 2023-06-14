@@ -39,6 +39,7 @@ class ListaEnlazada:
     def CargarXML(self, operacion):
         tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
         root = tree.getroot()
+        
         for indice, usuario in enumerate(root):
             rol = usuario.find('rol').text
             nombre = usuario.find('nombre').text
@@ -47,8 +48,11 @@ class ListaEnlazada:
             correo = usuario.find('correo').text
             contrasena = usuario.find('contrasena').text
             objeto = Clientes(rol, nombre, apellido, telefono, correo, contrasena)
-            if operacion == 1: # agregar datos a lista
-                self.add(objeto)
+            
+
+            if operacion == 1:
+                if self.verificar_nodos_repetidos():
+                    self.add(objeto)
             elif operacion == 2:
                 self.modify(objeto, indice)
             
@@ -82,7 +86,62 @@ class ListaEnlazada:
                   return actual.dato
                 actual = actual.siguiente
         print("mentira")
+
+
+    def nuevo_registroXML(self, ro , nombr, apellid, telefon, corre, contrasen):
+        tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
+        root = tree.getroot()
+        nueva_persona = ET.Element("usuario")
+        rol = ET.SubElement(nueva_persona, 'rol')
+        rol.text = ro
+        nombre = ET.SubElement(nueva_persona, 'nombre')
+        nombre.text = nombr
+        apellido = ET.SubElement(nueva_persona, 'apellido')
+        apellido.text = apellid
+        telefono = ET.SubElement(nueva_persona, 'telefono')
+        telefono.text = telefon
+        correo = ET.SubElement(nueva_persona, 'correo')
+        correo.text = corre
+        contrasena = ET.SubElement(nueva_persona, 'contrasena')
+        contrasena.text = contrasen
+        objeto = Clientes(rol.text, nombre.text, apellido.text, telefono.text, correo.text, contrasena.text)
+        self.add(objeto)
+        root.append(nueva_persona)
+        tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
+
+    def eliminar_nodo(self, dato):
+        if self.cabeza is None:
+            return False
+
+        if self.cabeza.dato.nombre == dato:
+            self.cabeza = self.cabeza.siguiente
+            return
+        nodo_actual = self.cabeza
+        nodo_anterior = None
+
+        while nodo_actual is not None:
+            if nodo_actual.dato.nombre == dato:
+                break
+            nodo_anterior = nodo_actual
+            nodo_actual = nodo_actual.siguiente
+
+        if nodo_actual is None:
+            return False
+        nodo_anterior.siguiente = nodo_actual.siguiente
+        nodo_actual.siguiente = None
                 
+    def verificar_nodos_repetidos(self):
+        valores = set() 
+
+        nodo_actual = self.cabeza
+        while nodo_actual is not None:
+            if nodo_actual.dato in valores:
+                return False  # Nodo repetido encontrado
+
+            valores.add(nodo_actual.dato)
+            nodo_actual = nodo_actual.siguiente
+
+        return True  # No se encontraron nodos repetidos
             
 
 
