@@ -1,5 +1,5 @@
 class Salas:
-    def __init__(self,sala, asientos):
+    def __init__(self, sala, asientos):
         self.sala = sala
         self.asientos = asientos
     

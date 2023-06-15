@@ -48,8 +48,6 @@ class ListaEnlazada:
             correo = usuario.find('correo').text
             contrasena = usuario.find('contrasena').text
             objeto = Clientes(rol, nombre, apellido, telefono, correo, contrasena)
-            
-
             if operacion == 1:
                 if self.verificar_nodos_repetidos():
                     self.add(objeto)
@@ -57,7 +55,7 @@ class ListaEnlazada:
                 self.modify(objeto, indice)
             
 
-    def editarXML(self, posicion,rol, nombre, apellido, correo, telefono, contrasena):
+    def editarXML(self, posicion, rol, nombre, apellido, correo, telefono, contrasena):
         tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
         root = tree.getroot()
         rol1 = root.find(f"usuario[{posicion}]/rol")
@@ -66,10 +64,10 @@ class ListaEnlazada:
         nombre1.text = nombre
         apellido1 = root.find(f"usuario[{posicion}]/apellido")
         apellido1.text = apellido
-        correo1 = root.find(f"usuario[{posicion}]/correo")
-        correo1.text = correo
         telefono1 = root.find(f"usuario[{posicion}]/telefono")
         telefono1.text = telefono
+        correo1 = root.find(f"usuario[{posicion}]/correo")
+        correo1.text = correo
         contrasena1 = root.find(f"usuario[{posicion}]/contrasena")
         contrasena1.text = contrasena
         tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
@@ -113,14 +111,14 @@ class ListaEnlazada:
         if self.cabeza is None:
             return False
 
-        if self.cabeza.dato.nombre == dato:
+        if self.cabeza.dato.correo == dato:
             self.cabeza = self.cabeza.siguiente
             return
         nodo_actual = self.cabeza
         nodo_anterior = None
 
         while nodo_actual is not None:
-            if nodo_actual.dato.nombre == dato:
+            if nodo_actual.dato.correo == dato:
                 break
             nodo_anterior = nodo_actual
             nodo_actual = nodo_actual.siguiente
@@ -142,6 +140,16 @@ class ListaEnlazada:
             nodo_actual = nodo_actual.siguiente
 
         return True  # No se encontraron nodos repetidos
+    
+    def eliminar_elemento_xml(self,lugar):
+        tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
+        root = tree.getroot()
+        elemento = root.find(f"usuario[{int(lugar)}]")
+        root.remove(elemento)
+        tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
+
+
+    
             
 
 
