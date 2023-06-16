@@ -12,5 +12,5 @@ class Pelicula:
         print(f"categoria: {self.categoria}, titulo: {self.titulo}, director: {self.director}, anio: {self.anio}, fecha: {self.fecha}, hora: {self.hora}")
 
     def imprimir_pelicula(self):
-        print(f"titulo: {self.titulo}, director: {self.director}, anio: {self.anio}, fecha: {self.fecha}, hora: {self.hora}")
+        print(f"titulo: {self.titulo}, director: {self.director}")
 

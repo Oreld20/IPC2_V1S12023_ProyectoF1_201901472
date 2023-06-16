@@ -2,6 +2,7 @@ from lista_enlazada import ListaEnlazada
 from lista_doblecircular import ListaDoblementeEnlazadaCircular
 from lista_doblenlazada import ListaDoblementeEnlazada
 import xml.etree.ElementTree as ET
+from clientes import Clientes
 contador=1
 Voletos=[]
 favoritas=[]
@@ -9,7 +10,8 @@ asientos1=[]
 lista_clientes = ListaEnlazada()
 lista_Genero = ListaDoblementeEnlazadaCircular()
 lista_salas = ListaDoblementeEnlazada()
-lista_clientes.nuevo_registroXML("administrador","Oreld", "Ardon", "41445281", "eliotorel10@gmail.com", "201901472")
+objeto = Clientes("administrador","Oreld", "Ardon", "41445281", "eliotorel10@gmail.com", "201901472")
+lista_clientes.add(objeto)
 
 def Menu():
     print("----------------------")

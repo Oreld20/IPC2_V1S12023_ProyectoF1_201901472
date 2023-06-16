@@ -1,4 +1,12 @@
 <usuarios>
+<usuario>
+ <rol>administrador</rol>
+ <nombre>Oreld</nombre>
+ <apellido>Ardon</apellido>
+ <telefono>41445281</telefono>
+ <correo>eliotorel10@gmail.com</correo>
+ <contrasena>201901472</contrasena>
+ </usuario>
  <usuario>
  <rol>cliente</rol>
  <nombre>John</nombre>
