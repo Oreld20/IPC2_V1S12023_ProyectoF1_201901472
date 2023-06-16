@@ -152,18 +152,27 @@ class ListaDoblementeEnlazada:
         tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\salas.XML')
 
     def eliminar_elemento_xml_sala(self, posicion):
-         # Parsear el archivo XML
         tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\salas.XML')
         root = tree.getroot()
         salas_elemento = root.find("cine/salas")
-        # Obtener la lista de elementos <sala>
         salas_lista = salas_elemento.findall("sala")
-            # Obtener el elemento <sala> correspondiente a la posición dada
         sala_elemento = salas_lista[int(posicion)]
-            # Eliminar el elemento <sala> del árbol XML
         salas_elemento.remove(sala_elemento)
-            # Guardar los cambios en el archivo XML
         tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\salas.XML')
+
+
+    def eliminar_sala_nombre(self, nombre):
+        tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\salas.XML')
+        root = tree.getroot()
+        for cine in root.findall('cine'):
+            salas = cine.find('salas')
+            for sala in salas.findall('sala'):
+                numero = sala.find('numero').text
+                if numero == nombre:
+                    salas.remove(sala)
+                                                
+        tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\salas.XML')
+
             
               
 

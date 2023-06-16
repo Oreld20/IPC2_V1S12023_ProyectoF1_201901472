@@ -62,6 +62,9 @@ class ListaDoblementeEnlazadaCircular:
 
 
     def CargarXML_Categorias(self):
+        self.primero = None
+        self.ultimo = None
+        
         tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
         root = tree.getroot()
         for categoria in root.findall("categoria"):
@@ -76,8 +79,7 @@ class ListaDoblementeEnlazadaCircular:
                 fecha = peli.find('fecha').text
                 hora = peli.find('hora').text
                 objeto = Pelicula(nombre, titulo, director, anio, fecha, hora)
-                if self.verificar_nodos_repetidos():
-                    self.insertar_final(objeto)
+                self.insertar_final(objeto)
 
 
     def buscar_elemento(self, dato):
@@ -142,17 +144,13 @@ class ListaDoblementeEnlazadaCircular:
     def eliminar_pelicula_por_titulo(self, titulo):
         tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
         root = tree.getroot()
-
-        # Buscar la película por su título
         for categoria in root.findall('categoria'):
             peliculas = categoria.find('peliculas')
             for pelicula in peliculas.findall('pelicula'):
                 titulo_pelicula = pelicula.find('titulo').text
                 if titulo_pelicula == titulo:
-                    # Eliminar la película del elemento raíz
                     peliculas.remove(pelicula)
 
-        # Guardar los cambios en el archivo XML
         tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
 
 
@@ -214,8 +212,7 @@ class ListaDoblementeEnlazadaCircular:
                 
                 # Añadir la nueva película a la lista de películas
                 peliculas.append(pelicula_nueva)
-                objeto = Pelicula(categoria, titulo, director, anio, fecha, hora)
-                self.insertar_final(objeto)
+                self.CargarXML_Categorias()
 
         # Guardar los cambios en el archivo XML
         tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
@@ -243,7 +240,62 @@ class ListaDoblementeEnlazadaCircular:
             print("Elemento editado con éxito.")
         else:
             print("No se encontró el elemento en la lista.")
-        
+
+
+    def agregar_categoria_xml(self, nombre_categoria):
+        # Cargar el archivo XML
+        tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
+        root = tree.getroot()
+
+        # Crear el nuevo elemento de categoría
+        nueva_categoria = ET.Element('categoria')
+
+        # Crear el elemento 'nombre' dentro de la nueva categoría
+        nombre = ET.Element('nombre')
+        nombre.text = nombre_categoria
+        nueva_categoria.append(nombre)
+
+        # Crear el elemento 'peliculas' dentro de la nueva categoría
+        peliculas = ET.Element('peliculas')
+        nueva_categoria.append(peliculas)
+
+        # Agregar la nueva categoría al elemento raíz
+        root.append(nueva_categoria)
+
+        # Guardar los cambios en el archivo XML
+        tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
+
+
+    def editar_categoria_xml(self, nombre_categoria_existente, nuevo_nombre_categoria):
+        # Cargar el archivo XML
+        tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
+        root = tree.getroot()
+
+        # Buscar la categoría existente por el nombre
+        for categoria in root.findall('categoria'):
+            nombre = categoria.find('nombre').text
+            if nombre == nombre_categoria_existente:
+                # Actualizar el nombre de la categoría
+                categoria.find('nombre').text = nuevo_nombre_categoria
+
+        # Guardar los cambios en el archivo XML
+        tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
+
+
+    def eliminar_categoria_xml(self, nombre_categoria):
+        # Cargar el archivo XML
+        tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
+        root = tree.getroot()
+
+        # Buscar y eliminar la categoría por el nombre
+        for categoria in root.findall('categoria'):
+            nombre = categoria.find('nombre').text
+            if nombre == nombre_categoria:
+                root.remove(categoria)
+
+        # Guardar los cambios en el archivo XML
+        tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\categorias_peliculas.XML')
+            
         
             
         

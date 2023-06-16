@@ -1,11 +1,11 @@
 <usuarios>
-<usuario>
+ <usuario>
  <rol>cliente</rol>
- <nombre>marvin</nombre>
- <apellido>cenate</apellido>
- <telefono>cenate27@gmail.com</telefono>
- <correo>41516235</correo>
- <contrasena>cenate2525</contrasena>
+ <nombre>John</nombre>
+ <apellido>Doe</apellido>
+ <telefono>123456789</telefono>
+ <correo>john.doe@example.com</correo>
+ <contrasena>mipassword123</contrasena>
  </usuario>
  <usuario>
  <rol>administrador</rol>
@@ -15,4 +15,4 @@
  <correo>jane.smith@example.com</correo>
  <contrasena>password456</contrasena>
  </usuario>
- </usuarios>
+</usuarios>

@@ -37,6 +37,8 @@ class ListaEnlazada:
 
 
     def CargarXML(self, operacion):
+        if operacion == 1:
+            self.cabeza=None
         tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
         root = tree.getroot()
         
@@ -141,11 +143,16 @@ class ListaEnlazada:
 
         return True  # No se encontraron nodos repetidos
     
-    def eliminar_elemento_xml(self,lugar):
+    def eliminar_elemento_xml(self,correo):
         tree = ET.parse(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
         root = tree.getroot()
-        elemento = root.find(f"usuario[{int(lugar)}]")
-        root.remove(elemento)
+            # Buscar el usuario por el correo
+        for usuario in root.findall('usuario'):
+            correo_usuario = usuario.find('correo').text
+            if correo_usuario == correo:
+                # Eliminar el usuario
+                root.remove(usuario)
+
         tree.write(r'C:\Users\eliot\OneDrive\Escritorio\Documentos\Proyecto[IPC2]\usuario.XML')
 
 

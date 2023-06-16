@@ -1,13 +1,15 @@
 from lista_enlazada import ListaEnlazada
 from lista_doblecircular import ListaDoblementeEnlazadaCircular
 from lista_doblenlazada import ListaDoblementeEnlazada
-from clientes import Clientes
 import xml.etree.ElementTree as ET
+contador=1
 Voletos=[]
-contador = 0
+favoritas=[]
+asientos1=[]
 lista_clientes = ListaEnlazada()
 lista_Genero = ListaDoblementeEnlazadaCircular()
 lista_salas = ListaDoblementeEnlazada()
+lista_clientes.nuevo_registroXML("administrador","Oreld", "Ardon", "41445281", "eliotorel10@gmail.com", "201901472")
 
 def Menu():
     print("----------------------")
@@ -36,6 +38,7 @@ def Menu():
         print("Ver listado de peliculas")
         print("---------------------------")
         lista_Genero.imprimir_pelicula()
+        Menu()
     
     elif opcion == "4":
         print("---------------------------")
@@ -61,10 +64,7 @@ def login():
     password = input("Ingrese su contraseña: ")
     nodo_usuarios=lista_clientes.getNodo(correo)
     
-    if correo == "administrador" and password =="201901472":
-        Menu_Administrador()
-    
-    elif nodo_usuarios.rol =="administrador":
+    if nodo_usuarios.rol =="administrador":
         if nodo_usuarios.correo == correo and nodo_usuarios.contrasena == password:
             Menu_Administrador()
     
@@ -85,6 +85,18 @@ def agregar_cliente():
     print("Cliente agregado correctamente.")
     Menu()
 
+def añadir_favoritos():
+    lista_Genero.imprimir_Categoria()
+    print("---------------------------")
+    print("si desea agreagra una pelicula a favoritos escriba el nombre de la pelicula")
+    decision = input("De lo contrario escriba no para volver al menu anterior: ")
+    if decision == "no":
+        Menu_Cliente()
+    else:
+     nombre=lista_Genero.buscar_elemento(decision)
+     favoritas.append(nombre.dato.titulo)
+     añadir_favoritos()
+
 def mostrar_clientes():
     print("---------------------------")
     lista_clientes.Imprimir()  
@@ -104,25 +116,30 @@ def Menu_Cliente():
         print("---------------------------")
         print("Listado de peliculas")
         print("---------------------------")
-        lista_Genero.imprimir_pelicula()
-    
+        añadir_favoritos()
+        
     elif opcion == "2":
         print("---------------------------")
         print("Listado de peliculas favoritas")
         print("---------------------------")
-    
+        if favoritas is None:
+            print("no hay peliculas favoritas")
+        else:
+            for elementos in favoritas:
+                print(elementos)
+        
     elif opcion == "3":
         print("---------------------------")
         print("Comprar voletos")
         print("---------------------------")
-        comprar_voletos()
+        otra_compra_voletos()
     
     elif opcion == "4":
         print("---------------------------")
         print("Historial de voletos comprados")
         print("---------------------------")
         historial_voletos()
-    
+
     elif opcion == "5":
         print("---------------------------")
         print("volver")
@@ -133,7 +150,7 @@ def Menu_Cliente():
         print("---------------------------")
         print("Opcion invalida")
         print("---------------------------")
-        Menu()
+        Menu_Cliente()
 
 def Menu_Administrador():
     print("---------------------------")
@@ -149,6 +166,10 @@ def Menu_Administrador():
     print("10. Editar Peliculas")
     print("11. Añadir Peliculas")
     print("12. Eliminar Peliculas")
+    print("13. Añadir nueva categoria")
+    print("14. Editar categoria")
+    print("15. Eliminar categoria")
+    print("16. Volver")
     opcion = 0
     opcion = input("Ingrese el numero correspondiente a la opcion: ")
     
@@ -159,7 +180,6 @@ def Menu_Administrador():
         lista_clientes.CargarXML(1)
         lista_clientes.Imprimir()
         Menu_Administrador()
-        print("XML de Clientes cargado")
     
     elif opcion == "2":
         print("---------------------------")
@@ -214,9 +234,8 @@ def Menu_Administrador():
         print("---------------------------")
         lista_clientes.Imprimir()
         dato = input("Ingrese el correo del cliente a eliminar: ")
-        lugar = int(input("Ingrese la posicion del cliente que desea eliminar: "))
         lista_clientes.eliminar_nodo(dato)
-        lista_clientes.eliminar_elemento_xml(lugar)
+        lista_clientes.eliminar_elemento_xml(dato)
         print("Cliente eliminado correctamente")
         Menu_Administrador()
         
@@ -230,6 +249,7 @@ def Menu_Administrador():
         asientos = input("Ingrese el nuevo numero de asientos: ")
         lista_salas.editarXML_Salas(posicion, sala, asientos)
         lista_salas.imprimir_lista()
+        Menu_Administrador()
 
     elif opcion == "8":
         print("---------------------------")
@@ -246,10 +266,8 @@ def Menu_Administrador():
         print("Eliminar salas")
         print("---------------------------")
         lista_salas.imprimir_lista()
-        salita = int(input("Ingrese la posicion de la sala que desea eliminar: "))
         codigo = input("Ingrese el numero de la sala que desea eliminar: ")
-        numero=salita-1
-        lista_salas.eliminar_elemento_xml_sala(numero)
+        lista_salas.eliminar_sala_nombre(codigo)
         lista_salas.eliminar_elemento(codigo)
         print("Sala eliminada correctamente.")
         lista_salas.imprimir_lista()
@@ -260,7 +278,7 @@ def Menu_Administrador():
         print("Editar peliculas")
         print("---------------------------")
         lista_Genero.imprimir_pelicula()
-        tittle = input("Ingrese el nombre de la pelicula que desea eliminar: ")
+        tittle = input("Ingrese el nombre de la pelicula que desea editar: ")
         nuevo_titulo= input("Ingrese el nuevo nombre de la pelicula: ")
         nuevo_director= input("Ingrese el nuevo director de la pelicula: ")
         nuevo_anio= input("Ingrese el nuevo año de la pelicula: ")
@@ -268,6 +286,7 @@ def Menu_Administrador():
         nuevo_hora= input("Ingrese la nueva hora de la pelicula: ")
         lista_Genero.editar_pelicula_por_titulo(tittle, nuevo_titulo,  nuevo_director, nuevo_anio, nuevo_fecha, nuevo_hora)
         print("pelicula Editada con exito")
+        Menu_Administrador()
 
     elif opcion == "11":
         print("---------------------------")
@@ -281,6 +300,7 @@ def Menu_Administrador():
         nuevo_hora= input("Ingrese la nueva hora de la pelicula: ")
         lista_Genero.añadir_pelicula(nuevo_genero, nuevo_titulo, nuevo_director, nuevo_anio, nuevo_fecha, nuevo_hora)
         print("pelicula añadida con exito")
+        Menu_Administrador()
 
     elif opcion == "12":
         print("---------------------------")
@@ -289,50 +309,51 @@ def Menu_Administrador():
         lista_Genero.imprimir_pelicula()
         titulo = input("Ingrese el nombre de la pelicula que desea eliminar: ")
         lista_Genero.eliminar_pelicula_por_titulo(titulo)
-        lista_Genero.eliminar_elemento(titulo)
+        lista_Genero.CargarXML_Categorias()
         print("Pelicula eliminada con exito")
+        Menu_Administrador()
 
     elif opcion == "13":
         print("---------------------------")
-        print("Salir")
+        print("Añadir nueva categoria")
+        print("---------------------------")
+        categoria = input("Ingrese la nueva categoria: ")
+        lista_Genero.agregar_categoria_xml(categoria)
+        print("categoria añadida con exito")
+        Menu_Administrador()
+
+    elif opcion == "14":
+        print("---------------------------")
+        print("Editar una categoria")
+        print("---------------------------")
+        name = input("Ingrese el nombre de la categoria a editar: ")
+        nuevo= input("Ingrese el nuevo nombre de la categoria: ")
+        lista_Genero.editar_categoria_xml(name, nuevo)
+        lista_Genero.CargarXML_Categorias()
+        print("Categoria editada con exito")
+        Menu_Administrador()
+        
+    elif opcion == "15":
+        print("---------------------------")
+        print("Eliminar una categoria")
+        print("---------------------------")
+        nombre_cate = input("Ingrese el nombre de la categoria a eliminar: ")
+        lista_Genero.eliminar_categoria_xml(nombre_cate)
+        lista_Genero.CargarXML_Categorias()
+        print("Categoria eliminada con exito")
+        Menu_Administrador()
+
+    elif opcion == "16":
+        print("---------------------------")
+        print("Volver")
         print("---------------------------")
         Menu()
-
+        
     else:
         print("---------------------------")
         print("Opcion invalida")
         print("---------------------------")
         Menu_Administrador()
-
-def comprar_voletos():
-    print("---------------------------")
-    print("Lista de peliculas: ")
-    lista_Genero.imprimir_pelicula()
-    decision = input("Escriba el nombre de la pelicula que desea adquirir: ")
-    posicion = lista_Genero.buscar_elemento(decision)
-    if decision == posicion.titulo:
-        print(f"nombre: {posicion.titulo}, director: {posicion.director}, año: {posicion.anio}, fecha: {posicion.fecha}, hora: {posicion.hora}")
-    noVoletos= input("Ingrese la cantidad de voletos que desea adquirir: ")
-    print("Lista de salas: ")
-    lista_salas.imprimir_lista()
-    sla= input("Ingrese el numero de sala para la pelicula: ")
-    existe_sala = lista_salas.buscar_elemento(sla)
-    if existe_sala.sala == sla:
-        print(" El momto total es de:")
-        monto = int(noVoletos)*42
-        print(str(monto) + " Q ")
-        print("Ingrese sus datos de facturacion: ")
-        nombre = input("Ingrese su nombre: ")
-        nit = input("Ingrese su NIT si no cuenta con un nit ingrese C/F: ")
-        codigo_voleto ="USACIPC2_201901472_0"
-        datos= [posicion.titulo, noVoletos, sla, monto, nombre, nit, codigo_voleto]
-        codigo_voleto = codigo_voleto + str(contador)
-        contador = contador + 1
-        Voletos.append(datos)
-        print("Compra realizada con exito")
-    else:
-        print("La sala ingresada no existe")
-    Menu_Cliente()
 
 def historial_voletos():
     print("---------------------------")
@@ -343,10 +364,47 @@ def historial_voletos():
             print(voleto)
     Menu_Cliente()
 
-        
-
-
-
-
+def otra_compra_voletos():
+    print("---------------------------")
+    print("Lista de peliculas: ")
+    print("---------------------------")
+    lista_Genero.imprimir_Categoria()
+    asientos2=[]
+    global contador
+    decision = input("Escriba el nombre de la pelicula que desea adquirir: ")
+    pelicula = lista_Genero.buscar_elemento(decision)
+    numero_Voletos= input("Ingrese la cantidad de voletos que desea adquirir: ")
+    print("Lista de salas disponibles: ")
+    lista_salas.imprimir_lista()
+    sala = input("Ingrese el numero de sala en la que desea ver la pelicula: ")
+    existe_sala = lista_salas.buscar_elemento(sala)
+    if existe_sala.sala == sala:
+         for _ in range(int(numero_Voletos)):
+            asiento = input("Ingrese el número de asiento: ")
+            if int(asiento) <= int(existe_sala.asientos):
+                for butacas in asientos1:
+                    if asiento == butacas:
+                        print(f"El asiento {asiento} esta ocupado")
+                        otra_compra_voletos()
+                    else:
+                        asientos1.append(asiento)
+                        asientos2.append(asiento)
+            else:
+                print("El asiento seleccionado esta fuera de rango")
+                otra_compra_voletos()                
+    else:
+        print("La sala ingresada no existe")
+        otra_compra_voletos()
+    monto = int(numero_Voletos)*42
+    print("Ingrese sus datos de facturacion: ")
+    nombre = input("Ingrese su nombre: ")
+    nit = input("Ingrese su NIT si no cuenta con un nit ingrese C/F: ")
+    direccion= input("Ingrese su direccion: ")
+    numero_boleto = f"#USACIPC2_201901472_{contador}"
+    datos= [pelicula.dato.titulo, numero_Voletos, existe_sala.sala, print(asientos2),  monto, nombre, nit, direccion,  numero_boleto]
+    Voletos.append(datos)
+    contador += 1
+    print("Compra realizada con exito")
+    Menu_Cliente()
 
 Menu()
